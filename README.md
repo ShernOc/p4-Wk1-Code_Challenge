@@ -1,27 +1,30 @@
+# CUSTOMER SERVICE SYSTEM 
 Create a Flask App with the following features;
 
-Models:
-Implement a User model for user management.
-Create another model of your choice with at least three fields.
+# Models:
+Implement a User model for  customer user management System .
 
-#Customer Management System 
-
+# Models : User, Staff Feedback
 User: username, email, phone_number,  contact_method 
-CRUD: 
+
+- Staff: staff_name, staff_email, staff_phone_number, department,  ticket_no, password
+
+- Feedback: title, user_id, description,  date 
 fetch, add, update, delete 
 
-Staff: staff_name, staff_email, staff_phone_number, department,  ticket_no, 
-fetch, add, update, delete 
+- Staff-Feedback, title, staff_id, description, password
 
-Feedback: title, user_id, description,  date 
-fetch, add, update, delete 
-
-Staff-Feedback, title, staff_id, description, 
-fetch, add, update, delete 
+# CRUD METHODS 
+-  Performed fetch, add, update, delete  operations on the User, Staff, Feedback
 
 # Installations 
-- Flask, Flask-SQLAlchemy, Flask-Migrate, 
-- 
+- Python, Flask, Flask-SQLAlchemy, Flask-Migrate 
+- Used @jwt_required() for Authentication. 
+
+# DATA: 
+- POSTMAN. 
+
+
 
 
 CRUD Operations:
