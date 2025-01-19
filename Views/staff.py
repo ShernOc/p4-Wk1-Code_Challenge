@@ -18,9 +18,9 @@ def get_staff():
         staff_list.append({
             "id": staff.id,
             "staff_name":staff.staff_name,
-            "email":staff.email,
-            "phone_number":staff.is_approved, 
-            "contact_method":staff.contact_method 
+            "email":staff.email, 
+            "department":staff.department,
+            "password":staff.password
         })
     return jsonify(staff_list)
 
@@ -30,7 +30,7 @@ def add_staff():
     data = request.get_json() # This is an object in json 
     staff_name = data['staff_name']
     email = data['email']
-    phone_number= data['phone_number']
+    department= data['department']
     password = data['password']
     
 #3. Check if the staffs exists
@@ -46,9 +46,7 @@ def add_staff():
         return jsonify({"error":"staff_name/email already exist"}),406
     else: 
         new_staff = Staff(staff_name = staff_name, email = email,
-        password = password,
-        phone_number = phone_number)
-        
+        department = department, password = password)
         #call the function 
         db.session.add(new_staff)
         db.session.commit()
@@ -66,26 +64,21 @@ def update_staff_name(staff_id):
         data = request.get_json()
         staff_name = data['staff_name']
         email = data['email']
-        phone_number = data['phone_number']
-        #what connects them
-        password = data['password']
-        department = data['department']
-    
+        department = department['department']
+        password= data['password']
+        #what connects them? 
 
         check_name= Staff.query.filter_by(email = email and id!=staff.id).first()
         check_email= Staff.query.filter_by(email = email and id!=staff.id).first()
-        check_phone = Staff.query.filter_by(phone_number = phone_number and id!=staff.id).first()
         
-        if check_name or check_email or check_phone:
-            return jsonify({"error": "Staff-name/Email/phone_number already exist"}), 406
+        if check_name or check_email:
+            return jsonify({"error": "Staff-name/Email already exist"}), 406
          
         else: 
             staff.staff_name = staff_name
             staff.email = email
-            staff.password = password 
-            staff.phone_number = phone_number
             staff.department = department
-            staff.password 
+            staff.password = password
         
         #Just commit no adding. 
             db.session.commit()

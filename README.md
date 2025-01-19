@@ -5,12 +5,11 @@ Create a Flask App with the following features;
 Implement a User model for  customer user management System .
 
 # Models : User, Staff Feedback
-User: username, email, phone_number,password
+- User: username, email, phone_number,password
 
-- Staff: staff_name, staff_email, phone_number, department,  ticket_no, password
+- Staff: staff_name, email, ,department,password
 
 - Feedback: title, user_id, description,  date 
-fetch, add, update, delete 
 
 
 # CRUD METHODS 
