@@ -39,7 +39,7 @@ class Staff(db.Model):
     def __repr__(self):
         return f"Staff('{self.feedback}')"
     
-# To-do table :  
+# Feedback Table :  
 class Feed(db.Model):
     __tablename__ = "Todos"
     
@@ -55,7 +55,6 @@ class Feed(db.Model):
     # Relationship of Feedback with staff and users 
     user = db.relationship("User", back_populates="feedback")
     tag = db.relationship("Staff", back_populates="feedback")
-    
     
     def __repr__(self):
         return f"Feed('{self.title}', '{self.description}', '{self.date}',{self.staff_id} ,{self.user_id})"
