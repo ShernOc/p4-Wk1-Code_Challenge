@@ -5,7 +5,7 @@ Create a Flask App with the following features;
 Implement a User model for  customer user management System .
 
 # Models : User, Staff Feedback
-User: username, email, phone_number,  contact_method 
+User: username, email, phone_number,password
 
 - Staff: staff_name, staff_email, staff_phone_number, department,  ticket_no, password
 

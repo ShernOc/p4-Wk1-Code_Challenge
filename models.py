@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, jsonify, 
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import MetaData
 from flask_migrate import Migrate
