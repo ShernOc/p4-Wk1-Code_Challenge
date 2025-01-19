@@ -19,6 +19,10 @@ fetch, add, update, delete
 Staff-Feedback, title, staff_id, description, 
 fetch, add, update, delete 
 
+# Installations 
+- Flask, Flask-SQLAlchemy, Flask-Migrate, 
+- 
+
 
 CRUD Operations:
 Perform Create, Read, Update, and Delete (CRUD) operations for the additional model.
