@@ -1,5 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import MetaData
+from datetime import datetime
 
 metadata = MetaData()
 db = SQLAlchemy(metadata= metadata)
@@ -21,7 +22,7 @@ class User(db.Model):
     
     #repr methods returns a string
     def __repr__(self):
-        return f"User('{self.username}', '{self.email}', '{self.phone_number}',{self.password} ,{self.feedback})" 
+        return f"User('{self.username}', '{self.email}', '{self.phone_number}')"
     
 # Staff Table
 class Staff(db.Model):
@@ -34,7 +35,7 @@ class Staff(db.Model):
     password= db.Column(db.String(120), nullable=False)
     
     #relationship between the Staff and feedback
-    feedback = db.relationship("Feed",back_populates= "staff", lazy = True)
+    feedback = db.relationship("Feed",back_populates= "user", lazy = True)
     
     def __repr__(self):
         return f"Staff('{self.feedback}')"
@@ -46,18 +47,18 @@ class Feed(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     title = db.Column(db.String(128), nullable = False)
     description = db.Column(db.String(256))
-    date= db.Column(db.DateTime, nullable=False)
+    date= db.Column(db.DateTime, default = True)
     
     #create a relationship 
     user_id = db.Column(db.Integer,db.ForeignKey("user.id"), nullable= False)
     staff_id = db.Column(db.Integer,db.ForeignKey("staff.id"), nullable= False)
     
     # Relationship of Feedback with staff and users 
-    user = db.relationship("User" ,back_populates="feedback")
-    tag = db.relationship("Staff", back_populates="feedback")
+    user = db.relationship("User" ,back_populates="feed")
+    tag = db.relationship("Staff", back_populates="feed")
     
     def __repr__(self):
-        return f"Feed('{self.title}', '{self.description}', '{self.date}',{self.staff_id} ,{self.user_id})"
+        return f"Feed('{self.title}', '{self.description}', '{self.date}')"
     
 
     
