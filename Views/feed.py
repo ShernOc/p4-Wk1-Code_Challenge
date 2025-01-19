@@ -5,7 +5,7 @@ from models import db,Feed
 #blueprint
 feed_bp = Blueprint('feed_bp', __name__)
 
-#Fetch/Get Staff  
+#Fetch/Get Feedback
 @feed_bp.route('/feeds')
 def get_feed():
     #get the feeds 
@@ -59,11 +59,11 @@ def add_feed():
 #update Feedback: 
 #you can update the name, password,email .. 
 @feed_bp.route('/feeds/<feed_id>', methods= ["PATCH"])
-def update_staff_name(feed_id):
-    #check if staff exist
+def update_feed(feed_id):
+    #check if feedback exist
     feed = Feed.query.get(feed_id)
     
-    if feed: # if staff exist
+    if feed: # if feed exist
         #get the data 
         data = request.get_json() 
         title = data['title']
@@ -93,7 +93,7 @@ def update_staff_name(feed_id):
     else:
         return jsonify({"error": "Feedback does not exist"}), 406
     
-#fetch one Staff based on id 
+#fetch one Feedback based on id 
 @feed_bp.route('/feeds/<int:id>')
 def fetch_one_user(id):
     feed= Feed.query.get(id)
@@ -110,7 +110,7 @@ def fetch_one_user(id):
     else: 
         return jsonify({"Error":"Feedback doesn't exist"})
     
-#Delete Staff
+#Delete Feedback
 feed_bp.route('/feeds/<int:feed_id>',methods=['DELETE'])
            
 def delete_user(feed_id):

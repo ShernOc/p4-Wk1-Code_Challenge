@@ -97,17 +97,15 @@ def fetch_one_user(id):
             "id":staff.id,
             "staff_name":staff.staff_name,
             "email":staff.email,
-            "phone_number":staff.is_complete,
+            "phone_number":staff.phone_number,
             "department":staff.department,
-            "staff_id":staff.staff_id,
             "password":staff.password
         })
     else: 
         return jsonify({"Error":"Staff doesn't exist"})
     
 #Delete Staff
-staff_bp.route('/staffs/<int:staff_id>',methods=['DELETE'])
-           
+@staff_bp.route('/staffs/<int:staff_id>',methods=['DELETE'])          
 def delete_user(staff_id):
     #get the staffs
     staff = Staff.query.get(staff_id)

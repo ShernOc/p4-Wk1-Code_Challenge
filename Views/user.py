@@ -20,7 +20,6 @@ def get_users():
             "username":user.username,
             "email":user.email,
             "phone_number":user.is_approved, 
-            "contact_method":user.contact_method 
         })
     return jsonify(user_list)
 
@@ -72,10 +71,9 @@ def update_username(user_id):
     #continue to check 
         check_username = User.query.filter_by(username=username and id!=user.id).first()
         check_email = User.query.filter_by(email = email and id!=user.id).first()
-        check_phone = User.query.filter_by(phone_number = phone_number and id!=user.id).first()
-        
-        if check_username or check_email or check_phone:
-            return jsonify({"error": "Username/Email/phone_number already exist"}), 406
+       
+        if check_username or check_email:
+            return jsonify({"error": "Username/Email already exist"}), 406
          
         else: 
             user.username = username
@@ -101,8 +99,7 @@ def fetch_one_user(id):
             "username":user.username,
             "email":user.email,
             "phone_number":user.is_complete,
-            "c":user.deadline,
-            "user_id":user.user_id,
+            "password":user.password
         })
     else: 
         return jsonify({"Error":"User doesn't exist"})
