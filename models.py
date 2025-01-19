@@ -29,7 +29,7 @@ class Staff(db.Model):
     
     id = db.Column(db.Integer,primary_key = True)
     staff_name = db.Column(db.String(128), nullable=False)
-    email = db.Column(db.String(120),nullable = False)
+    email = db.Column(db.String(120), nullable = False)
     department = db.Column(db.String(20), nullable=False)
     password= db.Column(db.String(120), nullable=False)
     
@@ -50,7 +50,7 @@ class Feed(db.Model):
     
     #create a relationship 
     user_id = db.Column(db.Integer,db.ForeignKey("Users.id"), nullable= False)
-    staff_id = db.Column(db.Integer,db.ForeignKey("Staffs.id"), nullable= False)
+    staff_id = db.Column(db.Integer,db.ForeignKey("Staff.id"), nullable= False)
     
     # Relationship of Feedback with staff and users 
     user = db.relationship("User", back_populates="feedback")
