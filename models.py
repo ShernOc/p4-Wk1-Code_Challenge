@@ -8,16 +8,16 @@ db = SQLAlchemy(metadata= metadata)
 #User: username, email, password, phone_number 
 class User(db.Model):
     #named the table Users 
-    __tablename__ = "Users"
+    __tablename__ = "users"
     
     id = db.Column(db.Integer,primary_key = True)
     username = db.Column(db.String(128), nullable = False)
     email = db.Column(db.String(128),nullable =False)
-    phone_number = db.Column(db.String(15))
+    phone_number = db.Column(db.String(120), nullable = False)
     password = db.Column(db.String(120), nullable = False)
 
     #create a relationship with the Feedback
-    feedback = db.relationship("Feed",back_populates="user", lazy =True)
+    feedback = db.relationship("Feed",back_populates="user", lazy = True)
     
     #repr methods returns a string
     def __repr__(self):
@@ -25,7 +25,7 @@ class User(db.Model):
     
 # Staff Table
 class Staff(db.Model):
-    __tablename__ = "Staff"
+    __tablename__ = "staff"
     
     id = db.Column(db.Integer,primary_key = True)
     staff_name = db.Column(db.String(128), nullable=False)
@@ -34,14 +34,14 @@ class Staff(db.Model):
     password= db.Column(db.String(120), nullable=False)
     
     #relationship between the Staff and feedback
-    feedback = db.relationship("Feed",back_populates="staff", lazy =True)
+    feedback = db.relationship("Feed",back_populates= "staff", lazy = True)
     
     def __repr__(self):
         return f"Staff('{self.feedback}')"
     
 # Feedback Table :  
 class Feed(db.Model):
-    __tablename__ = "Todos"
+    __tablename__ = "feed"
     
     id = db.Column(db.Integer, primary_key = True)
     title = db.Column(db.String(128), nullable = False)
@@ -49,11 +49,11 @@ class Feed(db.Model):
     date= db.Column(db.DateTime, nullable=False)
     
     #create a relationship 
-    user_id = db.Column(db.Integer,db.ForeignKey("Users.id"), nullable= False)
-    staff_id = db.Column(db.Integer,db.ForeignKey("Staff.id"), nullable= False)
+    user_id = db.Column(db.Integer,db.ForeignKey("user.id"), nullable= False)
+    staff_id = db.Column(db.Integer,db.ForeignKey("staff.id"), nullable= False)
     
     # Relationship of Feedback with staff and users 
-    user = db.relationship("User", back_populates="feedback")
+    user = db.relationship("User" ,back_populates="feedback")
     tag = db.relationship("Staff", back_populates="feedback")
     
     def __repr__(self):
