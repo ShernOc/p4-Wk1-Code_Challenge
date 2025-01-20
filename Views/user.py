@@ -20,8 +20,18 @@ def get_users():
             "id": user.id,
             "username":user.username,
             "email":user.email,
-            "phone_number":user.is_approved, 
+            "phone_number":user.phone_number,
+            #fetch user based on there feedback 
+            "feed":[
+                {
+                    "id":feed.id,
+                    "title":feed.title,
+                    "description":feed.description,
+    
+                } for feed in user.feed
+            ] 
         })
+        
     return jsonify(user_list)
 
 #Add a users 
@@ -64,10 +74,10 @@ def update_username(user_id):
     if user: # if user exist
         #get the data 
         data = request.get_json()
-        username = data['username']
-        email = data['email']
-        phone_number = data['phone_number']
-        password = data['password']
+        username = data.get('username' , user.username)
+        email = data.get('email', user.email)
+        phone_number = data.get('phone_number', user.phone_number)
+        password = data.get('password', user.password)
     
     #continue to check 
         check_username = User.query.filter_by(username=username and id!=user.id).first()

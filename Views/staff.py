@@ -69,10 +69,10 @@ def update_staff_name(staff_id):
     if staff: # if staff exist
         #get the data 
         data = request.get_json()
-        staff_name = data['staff_name']
-        email = data['email']
-        department = data['department']
-        password= data['password']
+        staff_name = data.get('staff_name', staff.staff_name)
+        email = data.get('email', staff.email)
+        department = data.get('department', staff.department)
+        password= data.get('password' , staff.password)
         #what connects them? 
 
         check_name= Staff.query.filter_by(email = email and id!=staff.id).first()

@@ -23,7 +23,9 @@ def get_feed():
             #date formation 
             "date": feed.date,
             "user_id":feed.user_id,
-            "staff_id":feed.staff_id
+            "staff_id":feed.staff_id,
+            "user":{"id":feed.user.id, "username":feed.user.username, "email":feed.user.email},
+            "staff":{"id":feed.staff.id, "department":feed.staff.department, "email":feed.staff.email}
         })
     return jsonify(feed_list)
 
@@ -68,11 +70,11 @@ def update_feed(feed_id):
     if feed: # if feed exist
         #get the data 
         data = request.get_json() 
-        title = data['title']
-        description = data['description']
-        date= datetime.strptime(data['date'],'%Y-%m-%d') 
-        user_id = data['user_id']
-        staff_id = data['staff_id']
+        title = data.get('title', feed.title)
+        description = data.get('description', feed.description)
+        date= datetime.strptime(data.get['date'],'%Y-%m-%d') 
+        user_id = data.get('user_id', feed.user_id)
+        staff_id = data.get('staff_id', feed.staff_id)
         
         #Check the data 
         check_title = Feed.query.filter_by(title=title and id!=feed.id).first() 
@@ -106,6 +108,8 @@ def fetch_one_user(id):
             "date":feed.date,
             "user_id":feed.user_id,
             "staff_id":feed.staff_id,
+            "user":{"id":feed.user.id, "username":feed.user.username, "email":feed.user.email},
+            "staff":{"id":feed.staff.id, "department":feed.staff.department, "email":feed.staff.email}
         })
     else: 
         return jsonify({"Error":"Feedback doesn't exist"})
