@@ -18,7 +18,7 @@ class User(db.Model):
     password = db.Column(db.String(120), nullable = False)
 
     #create a relationship with the Feedback
-    feedback = db.relationship("Feed",back_populates="user", lazy = True)
+    feedback = db.relationship("Feed",back_populates="users", lazy = True)
     
     #repr methods returns a string
     def __repr__(self):
@@ -35,7 +35,7 @@ class Staff(db.Model):
     password= db.Column(db.String(120), nullable=False)
     
     #relationship between the Staff and feedback
-    feedback = db.relationship("Feed",back_populates= "user", lazy = True)
+    feedback = db.relationship("Feed",back_populates= "users", lazy = True)
     
     def __repr__(self):
         return f"Staff('{self.feedback}')"
@@ -50,7 +50,7 @@ class Feed(db.Model):
     date= db.Column(db.DateTime, default = True)
     
     #create a relationship 
-    user_id = db.Column(db.Integer,db.ForeignKey("user.id"), nullable= False)
+    user_id = db.Column(db.Integer,db.ForeignKey("users.id"), nullable= False)
     staff_id = db.Column(db.Integer,db.ForeignKey("staff.id"), nullable= False)
     
     # Relationship of Feedback with staff and users 
@@ -59,6 +59,8 @@ class Feed(db.Model):
     
     def __repr__(self):
         return f"Feed('{self.title}', '{self.description}', '{self.date}')"
+    
+    
     
 
     

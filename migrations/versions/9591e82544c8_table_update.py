@@ -48,5 +48,7 @@ def downgrade():
     sa.Column('password', sa.VARCHAR(length=120), nullable=False),
     sa.PrimaryKeyConstraint('id')
     )
+    op.rename_table('User', 'users')
+    
     op.drop_table('User')
     # ### end Alembic commands ###

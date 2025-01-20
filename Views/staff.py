@@ -1,6 +1,11 @@
 from flask import jsonify,request,Blueprint
 from models import db,Staff
 
+
+
+#import the emails stuff here 
+from  flask_mail import Mail 
+
 #blueprint
 staff_bp = Blueprint('staff_bp', __name__)
 

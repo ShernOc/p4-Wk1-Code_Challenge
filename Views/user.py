@@ -1,5 +1,6 @@
 from flask import jsonify,request,Blueprint
 from models import db,User
+from flask_mail import Mail
 
 #blueprint
 user_bp = Blueprint('user_bp', __name__)

@@ -1,7 +1,7 @@
 from flask import Flask, jsonify, request 
 from flask_migrate import Migrate
 from models import User,Staff,Feed, db
-from flask_mail import 
+from flask_mail import Mail
 
 #create a flask class 
 app = Flask(__name__)
@@ -25,39 +25,34 @@ app.register_blueprint(staff_bp)
 def index(): 
     return ("<h1> Customer Service Management System </h1>")
 
-
-#configuration of the email/#
-app.config ["mail_server "] = smtp.gmail.com 
-
-# import  flask mail, Message 
-
+#Mail Credentials 
  
-# SMTP credentials
-app.config['MAIL_SERVER'] = 'smtp.gmail.com'
-app.config['MAIL_PORT'] = 587
-app.config['MAIL_USERNAME'] = 'sherlyne.ochieng@student.moringaschool.com'
-app.config['MAIL_PASSWORD'] = 'slim hbpc dwit bsli'
-app.config['MAIL_USE_TLS'] = True
-app.config['MAIL_USE_SSL'] = False
+# # SMTP credentials
+# app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+# app.config['MAIL_PORT'] = 587
+# app.config['MAIL_USERNAME'] = 'sherlyne.ochieng@student.moringaschool.com'
+# app.config['MAIL_PASSWORD'] = 'slim hbpc dwit bsli'
+# app.config['MAIL_USE_TLS'] = True
+# app.config['MAIL_USE_SSL'] = False
 
-mail = Mail(app)
+# mail = Mail(app)
 
-#create an instance of Message 
-@app.route('/')
-def email():
-    msg = Message(
-    subject = "First Email!",
-    sender = "sherlyne.ochieng@student.moringaschool.com",
-    recipients= ["sherlynea8622@gmail.com","ashley.natasha1@student.moringaschool.com", "antony.wambugu@student.moringaschool.com", "abdimalik.omar1@student.moringaschool.com" ],
-    #What the message body will send
-    body = "Hello,this is the first Flask email from the flask app. GROUP6")
-    mail.send(msg)
-    return "Message sent Successfully"
+# #create an instance of Message 
+# @app.route('/')
+# def email():
+#     msg = Message(
+#     subject = "First Email!",
+#     sender = "sherlyne.ochieng@student.moringaschool.com",
+#     recipients= ["sherlynea8622@gmail.com","ashley.natasha1@student.moringaschool.com", "antony.wambugu@student.moringaschool.com", "abdimalik.omar1@student.moringaschool.com" ],
+#     #What the message body will send
+#     body = "Hello,this is the first Flask email from the flask app. GROUP6")
+#     mail.send(msg)
+#     return "Message sent Successfully"
 
-    except 
+#     except 
 
-if __name__ == '__main__':
-    app.run(debug=True)
+# if __name__ == '__main__':
+#     app.run(debug=True)
     
     
 
