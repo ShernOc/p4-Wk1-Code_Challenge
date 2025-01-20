@@ -29,6 +29,8 @@ def get_staff():
         })
     return jsonify(staff_list)
 
+
+
 #Add a staffs 
 @staff_bp.route('/staffs', methods=["POST"])
 def add_staff():
@@ -69,7 +71,7 @@ def update_staff_name(staff_id):
         data = request.get_json()
         staff_name = data['staff_name']
         email = data['email']
-        department = department['department']
+        department = data['department']
         password= data['password']
         #what connects them? 
 
@@ -90,7 +92,7 @@ def update_staff_name(staff_id):
             return jsonify({"Success": "Staff updated successfully"}), 201
 #if the staff does not exist? 
     else:
-        return jsonify({"error": "Staff does not exist"}), 406
+        return jsonify({"error":"Staff does not exist"}), 406
     
 #fetch one Staff based on id 
 @staff_bp.route('/staffs/<int:id>')
@@ -102,12 +104,11 @@ def fetch_one_user(id):
             "id":staff.id,
             "staff_name":staff.staff_name,
             "email":staff.email,
-            "phone_number":staff.phone_number,
             "department":staff.department,
             "password":staff.password
         })
     else: 
-        return jsonify({"Error":"Staff doesn't exist"})
+        return jsonify({"Error":"Staff does not exist"}),406
     
 #Delete Staff
 @staff_bp.route('/staffs/<int:staff_id>',methods=['DELETE'])          
