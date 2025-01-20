@@ -11,7 +11,6 @@ Implement a User model for  customer user management System .
 
 - Feedback: title, user_id, description,  date 
 
-
 # CRUD METHODS 
 -  Performed fetch, add, update, delete  operations on the User, Staff, Feedback
 
