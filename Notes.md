@@ -24,13 +24,15 @@ models.py
 
 #VITE/TAILWIND INSTALLATION
 
-1. Create a front-end folder 
+1. Create a front-end folder/componenst and the major folders
 Install react application with vite/tailwind
 2. REACT COMPONENTS:
 - create the files
 - import the apps in app.py
 app.py: 
 - Route-dom,
+ - <Route>
+  <route path>
 -create react components: 
 - 
 - Import the link : Link for navigation  
@@ -47,8 +49,6 @@ app.py:
 
 - 
 
- - <Route>
-  <route path>
 
 
 
