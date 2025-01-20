@@ -1,6 +1,8 @@
 from flask import Flask, jsonify, request 
 from flask_migrate import Migrate
 from models import User,Staff,Feed, db
+from flask_jwt_extended import JWTManager
+from datetime import timedelta
 from flask_mail import Mail
 
 #create a flask class 
@@ -16,14 +18,30 @@ db.init_app(app)
 #import all the functions in views 
 from Views import * 
 
-#register the blueprints 
+#register all the  blueprints 
 app.register_blueprint(user_bp)
 app.register_blueprint(feed_bp)
 app.register_blueprint(staff_bp)
+app.register_blueprint(auth_bp)
+
 
 @app.route('/')
 def index(): 
     return ("<h1> Customer Service Management System </h1>")
+
+
+#Authentication/Registration 
+#Configation of jwt file: 
+# Setup the Flask-JWT-Extended extension
+app.config["JWT_SECRET_KEY"] = "Sherlyne-23456"  # Change this!
+#when will it be the secrete code be over / Expires after 2 hours
+app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=2)
+#instance of jwt class
+jwt = JWTManager(app)
+
+#initialize 
+jwt.init_app(app)
+
 
 #Mail Credentials 
  
