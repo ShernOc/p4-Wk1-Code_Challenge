@@ -19,7 +19,8 @@ def get_feed():
         feed_list.append({
             "id": feed.id,
             "title":feed.title,
-            "description" :feed.description, 
+            "description" :feed.description,
+            #date formation 
             "date": feed.date,
             "user_id":feed.user_id,
             "staff_id":feed.staff_id
@@ -33,7 +34,8 @@ def add_feed():
     data = request.get_json() 
     title = data['title']
     description = data['description']
-    date= datetime(data['date']) # get the dates 
+    #dates 
+    date= datetime.strptime(data['date'],'%Y-%m-%d') 
     user_id = data['user_id']
     staff_id = data['staff_id']
     
@@ -56,7 +58,7 @@ def add_feed():
         db.session.commit()
         return jsonify({"Success": "Feedback added successfully"})
 
-#update Feedback: 
+#Update Feedback: 
 #you can update the name, password,email .. 
 @feed_bp.route('/feeds/<feed_id>', methods= ["PATCH"])
 def update_feed(feed_id):
@@ -68,7 +70,7 @@ def update_feed(feed_id):
         data = request.get_json() 
         title = data['title']
         description = data['description']
-        date= datetime(data['date']) # get  the dates 
+        date= datetime.strptime(data['date'],'%Y-%m-%d') 
         user_id = data['user_id']
         staff_id = data['staff_id']
         
@@ -77,21 +79,19 @@ def update_feed(feed_id):
         check_user = Feed.query.filter_by(user_id=user_id and id!=feed.id).first()
     
         if check_title or check_user:
-            return jsonify({"error": "Title/User already exist"}), 406
-         
-        else: 
             feed.title = title
             feed.description = description
             feed.date= date
             feed.user_id = user_id
             feed.staff_id= staff_id
             
-        #Just commit no adding. 
+            
+            #Just commit no adding. 
             db.session.commit()
             return jsonify({"Success": "Feedback updated successfully"}), 201
 #if the Feedback does not exist? 
     else:
-        return jsonify({"error": "Feedback does not exist"}), 406
+        return jsonify({"error": "Feedback id does not exist"}), 406
     
 #fetch one Feedback based on id 
 @feed_bp.route('/feeds/<int:id>')
@@ -111,7 +111,7 @@ def fetch_one_user(id):
         return jsonify({"Error":"Feedback doesn't exist"})
     
 #Delete Feedback
-feed_bp.route('/feeds/<int:feed_id>',methods=['DELETE'])
+@feed_bp.route('/feeds/<int:feed_id>', methods=['DELETE'])
            
 def delete_user(feed_id):
     #get the feeds
@@ -121,7 +121,7 @@ def delete_user(feed_id):
         db.session.delete(feed)
         db.session.commit()
         return jsonify({"Success":"Feedback deleted successfully"})
-
+    
     else:
          return jsonify({"Error": "Feedback does not exist"})
      

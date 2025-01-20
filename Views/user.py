@@ -106,8 +106,7 @@ def fetch_one_user(id):
         return jsonify({"Error":"User doesn't exist"})
     
 #Delete Users 
-user_bp.route('/users/<int:user_id>',methods=['DELETE'])
-           
+@user_bp.route('/users/<int:user_id>', methods=['DELETE'])
 def delete_user(user_id):
     #get the users
     user = User.query.get(user_id)
@@ -118,6 +117,6 @@ def delete_user(user_id):
         return jsonify({"Success":"User Deleted Successfully"})
 
     else:
-         return jsonify({"Error": "User does not exist"})
+        return jsonify({"Error": "User does not exist"})
      
      
