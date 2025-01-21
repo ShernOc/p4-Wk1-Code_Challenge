@@ -1,9 +1,6 @@
 from flask import jsonify,request,Blueprint
 from models import db,Staff
-
-
-
-#import the emails stuff here 
+from flask_jwt_extended import jwt_required, get_jwt_identity
 from  flask_mail import Mail 
 
 #blueprint
@@ -11,13 +8,13 @@ staff_bp = Blueprint('staff_bp', __name__)
 
 #Fetch/Get Staff  
 @staff_bp.route('/staffs')
+@jwt_required()
 def get_staff():
+    current_user_id = get_jwt_identity()
     #get the staffs 
-    staffs = Staff.query.all()
-    #create an empty list to store the staffs
+    staffs = Staff.query.filter_by(staff_id=current_user_id)
+    # empty list to store the staffs
     staff_list = []
-    
-    #create a loop that will loop through staffs 
     for staff in staffs: 
         #in the append pass it as an json objects
         staff_list.append({
@@ -31,9 +28,9 @@ def get_staff():
     return jsonify(staff_list)
 
 
-
 #Add a staffs 
 @staff_bp.route('/staffs', methods=["POST"])
+@jwt_required()
 def add_staff():
     data = request.get_json() # This is an object in json 
     staff_name = data['staff_name']

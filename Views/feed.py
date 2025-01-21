@@ -1,9 +1,11 @@
 from flask import jsonify,request,Blueprint 
 from datetime import datetime
 from models import db,Feed
+from flask_jwt_extended import jwt_required, get_jwt_identity
 
 #blueprint
 feed_bp = Blueprint('feed_bp', __name__)
+
 
 #Fetch/Get Feedback
 @feed_bp.route('/feeds')
@@ -31,29 +33,28 @@ def get_feed():
 
 #Add a feeds 
 @feed_bp.route('/feeds', methods=["POST"])
+@jwt_required()
 def add_feed():
     #initialize data 
-    data = request.get_json() 
+    data = request.get_json()
+    current_user_id= get_jwt_identity() 
     title = data['title']
     description = data['description']
     #dates 
     date= datetime.strptime(data['date'],'%Y-%m-%d') 
-    user_id = data['user_id']
     staff_id = data['staff_id']
     
 #3. Check if the feeds exists
     check_title = Feed.query.filter_by(title=title).first() 
-    check_user = Feed.query.filter_by(user_id=user_id).first()
 
     #prints the output 
     print("Title", check_title)
-    print("User_id", check_user)
     
     #check and create errors
     if check_title:
         return jsonify({"error":"User/title already exist"}),406
     else: 
-        new_feed = Feed(title = title, description = description, date = date, user_id = user_id, staff_id = staff_id)
+        new_feed = Feed(title = title, description = description, date = date, user_id = current_user_id, staff_id = staff_id)
         
         #call the function 
         db.session.add(new_feed)

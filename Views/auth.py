@@ -7,26 +7,27 @@ from flask_jwt_extended import create_access_token,jwt_required, get_jwt_identit
 #blueprint
 auth_bp = Blueprint('auth_bp', __name__)
 
-
 #Login
-@auth_bp.route('/login', methods = ['POST'])
+@auth_bp.route('/login', methods=['POST'])
 def login():
     data = request.get_json()
-    username = data["username"]
+    email = data["email"]
     password = data["password"]
     
     #check if the user with the email exist 
-    user = User.query.filter_by(email = email).first()
+    user = User.query.filter_by(email= email).first()
     
     if user and check_password_hash(user.password,password):
         access_token = create_access_token(identity=user.id)
-        return jsonify({"access_token":access_token})
+        # return jsonify({"Success": "Success done"})
+        return jsonify({"access_token":access_token}), 208
         
     else: 
         return jsonify({"Error":"User/Email is incorrect"}), 404
     
     #get the current user
 @auth_bp.route('/current_user', methods = ['GET'])
+@jwt_required()
 def current_user():
     current_user_id = get_jwt_identity()
     user = User.query.get(current_user_id)
