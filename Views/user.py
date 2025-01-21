@@ -43,7 +43,7 @@ def add_users():
     username = data['username']
     email = data['email']
     phone_number= data['phone_number']
-    password = data['password']
+    password = generate_password_hash(data['password'])
     
 #3. Check if the users exists
     check_username = User.query.filter_by(username=username).first() 

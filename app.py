@@ -30,17 +30,15 @@ def index():
     return ("<h1> Customer Service Management System </h1>")
 
 
-#Authentication/Registration 
-#Configation of jwt file: 
-# Setup the Flask-JWT-Extended extension
+#Authentication
 app.config["JWT_SECRET_KEY"] = "Sherlyne-23456"  # Change this!
-#when will it be the secrete code be over / Expires after 2 hours
+#Toke Expire in 2 hours 
 app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=2)
-#instance of jwt class
-jwt = JWTManager(app)
 
-#initialize 
+jwt = JWTManager(app)
 jwt.init_app(app)
+
+
 
 
 #Mail Credentials 

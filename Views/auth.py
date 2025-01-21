@@ -14,16 +14,17 @@ def login():
     email = data["email"]
     password = data["password"]
     
-    #check if the user with the email exist 
+    #check if the user with the email exist (if)
     user = User.query.filter_by(email= email).first()
     
     if user and check_password_hash(user.password,password):
         access_token = create_access_token(identity=user.id)
-        # return jsonify({"Success": "Success done"})
+        
         return jsonify({"access_token":access_token}), 208
         
+        # pass an error
     else: 
-        return jsonify({"Error":"User/Email is incorrect"}), 404
+        return jsonify({"Error":"Email/Password is incorrect"}), 404
     
     #get the current user
 @auth_bp.route('/current_user', methods = ['GET'])
@@ -39,5 +40,4 @@ def current_user():
                 "is_approved":user.is_approved}]
     return jsonify({"Current_user": user_data})
     
-
 #Logout
