@@ -30,6 +30,7 @@ class Staff(db.Model):
     
     id = db.Column(db.Integer,primary_key = True)
     staff_name = db.Column(db.String(128), nullable=False)
+    is_admin = db.Column(db.Boolean, default = False)
     email = db.Column(db.String(120), nullable = False)
     department = db.Column(db.String(20), nullable=False)
     password= db.Column(db.String(120), nullable=False)

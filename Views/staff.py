@@ -23,6 +23,7 @@ def get_staff():
         staff_list.append({
             "id": staff.id,
             "staff_name":staff.staff_name,
+            "is_admin":staff.is_admin,
             "email":staff.email, 
             "department":staff.department,
             "password":staff.password
