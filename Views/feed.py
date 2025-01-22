@@ -41,7 +41,8 @@ def add_feed():
     title = data['title']
     description = data['description']
     #dates 
-    date= datetime.strptime(data['date'],'%Y-%m-%d') 
+    # date= datetime.strptime(data['date'],'%Y-%m-%d') 
+    date= datetime(data['date'],'%Y-%m-%d') 
     staff_id = data['staff_id']
     
 #3. Check if the feeds exists

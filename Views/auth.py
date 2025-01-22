@@ -7,7 +7,7 @@ from flask_jwt_extended import create_access_token,jwt_required, get_jwt_identit
 #blueprint
 auth_bp = Blueprint('auth_bp', __name__)
 
-#Login
+#Login User 
 @auth_bp.route('/login', methods=['POST'])
 def login():
     data = request.get_json()
@@ -20,24 +20,66 @@ def login():
     if user and check_password_hash(user.password,password):
         access_token = create_access_token(identity=user.id)
         
-        return jsonify({"access_token":access_token}), 208
+        return jsonify({"access_token":access_token}), 200
         
-        # pass an error
+    # pass an error
     else: 
         return jsonify({"Error":"Email/Password is incorrect"}), 404
     
-    #get the current user
+#get the current user functions
 @auth_bp.route('/current_user', methods = ['GET'])
 @jwt_required()
 def current_user():
     current_user_id = get_jwt_identity()
+    print(current_user_id)
+    #fetch the user
     user = User.query.get(current_user_id)
     
-    #get the user data 
+    #get the user data object 
     user_data = [{"id": user.id,
                 "username":user.username,
                 "email":user.email, 
                 "is_approved":user.is_approved}]
-    return jsonify({"Current_user": user_data})
     
-#Logout
+    return jsonify(user_data)
+
+
+
+
+# #Login Staff 
+# @auth_bp.route('/login', methods=['POST'])
+# def login():
+#     data = request.get_json()
+#     email = data["email"]
+#     password = data["password"]
+    
+#     #check if the user with the email exist (if)
+#     user = User.query.filter_by(email= email).first()
+    
+#     if user and check_password_hash(user.password,password):
+#         access_token = create_access_token(identity=user.id)
+        
+#         return jsonify({"access_token":access_token}), 208
+        
+#         # pass an error
+#     else: 
+#         return jsonify({"Error":"Email/Password is incorrect"}), 404
+    
+# #get the current user functions
+# @auth_bp.route('/current_user', methods = ['GET'])
+# @jwt_required()
+# def current_user():
+#     current_user_id = get_jwt_identity()
+    
+#     #fetch the user
+#     user = User.query.get(current_user_id)
+    
+#     #get the user data object 
+#     user_data = [{"id": user.id,
+#                 "username":user.username,
+#                 "email":user.email, 
+#                 "is_approved":user.is_approved}]
+    
+#     return jsonify({"Current_user": user_data})
+    
+# #Logout
