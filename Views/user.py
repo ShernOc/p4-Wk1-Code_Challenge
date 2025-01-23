@@ -40,7 +40,7 @@ def get_users():
 @user_bp.route('/users', methods=["POST"])
 def add_users():
     data = request.get_json() # This is an object in json 
-    username = data['username']
+    username =data['username']
     email = data['email']
     phone_number= data['phone_number']
     password = generate_password_hash(data['password'])

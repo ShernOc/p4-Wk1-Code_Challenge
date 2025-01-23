@@ -1,52 +1,51 @@
 from flask import jsonify,request,Blueprint 
 from datetime import datetime
-from models import db,Feed
+from models import db, Feedback
 from flask_jwt_extended import jwt_required, get_jwt_identity
 
 #blueprint
 feed_bp = Blueprint('feed_bp', __name__)
 
-
 #Fetch/Get Feedback
 @feed_bp.route('/feeds')
+@jwt_required()
 def get_feed():
+    current_user_id= get_jwt_identity()
     #get the feeds 
-    feeds = Feed.query.all()
+    feeds = Feedback.query.filter_by (user_id = current_user_id)
+    
     #create an empty list to store the feedback
     feed_list = []
-    
     #create a loop that will loop through feed 
     for feed in feeds: 
-        #in the append pass it as an json objects
+       
         feed_list.append({
             "id": feed.id,
             "title":feed.title,
             "description" :feed.description,
             #date formation 
             "date": feed.date,
-            "user_id":feed.user_id,
-            "staff_id":feed.staff_id,
             "user":{"id":feed.user.id, "username":feed.user.username, "email":feed.user.email},
             "staff":{"id":feed.staff.id, "department":feed.staff.department, "email":feed.staff.email}
         })
     return jsonify(feed_list)
 
 #Add a feeds 
-@feed_bp.route('/feeds', methods=["POST"])
+@feed_bp.route('/user_feeds', methods=["POST"])
 @jwt_required()
 def add_feed():
     #initialize data 
     data = request.get_json()
-    current_user_id= get_jwt_identity() 
+    current_user_id= get_jwt_identity()
+
     title = data['title']
     description = data['description']
     #dates 
-    # date= datetime.strptime(data['date'],'%Y-%m-%d') 
     date= datetime(data['date'],'%Y-%m-%d') 
     staff_id = data['staff_id']
     
-#3. Check if the feeds exists
-    check_title = Feed.query.filter_by(title=title).first() 
+# Check if the feeds exists
+    check_title = Feedback.query.filter_by(title=title).first() 
 
     #prints the output 
     print("Title", check_title)
@@ -55,7 +54,7 @@ def add_feed():
     if check_title:
         return jsonify({"error":"User/title already exist"}),406
     else: 
-        new_feed = Feed(title = title, description = description, date = date, user_id = current_user_id, staff_id = staff_id)
+        new_feed = Feedback(title = title, description = description, date = date, user_id = current_user_id)
         
         #call the function 
         db.session.add(new_feed)
@@ -63,13 +62,14 @@ def add_feed():
         return jsonify({"Success": "Feedback added successfully"})
 
 #Update Feedback: 
-#you can update the name, password,email .. 
-@feed_bp.route('/feeds/<feed_id>', methods= ["PATCH"])
+@feed_bp.route('/user_feeds/<feed_id>', methods= ["PATCH"])
+@jwt_required()
 def update_feed(feed_id):
+    current_user_id = get_jwt_identity()
     #check if feedback exist
-    feed = Feed.query.get(feed_id)
+    feed = Feedback.query.get(feed_id)
     
-    if feed: # if feed exist
+    if feed and feed.user_id == current_user_id: # if feed exist
         #get the data 
         data = request.get_json() 
         title = data.get('title', feed.title)
@@ -79,8 +79,8 @@ def update_feed(feed_id):
         staff_id = data.get('staff_id', feed.staff_id)
         
         #Check the data 
-        check_title = Feed.query.filter_by(title=title and id!=feed.id).first() 
-        check_user = Feed.query.filter_by(user_id=user_id and id!=feed.id).first()
+        check_title = Feedback.query.filter_by(title=title and id!=feed.id).first() 
+        check_user = User_Feed.query.filter_by(user_id=user_id and id!=feed.id).first()
     
         if check_title or check_user:
             feed.title = title
@@ -89,18 +89,19 @@ def update_feed(feed_id):
             feed.user_id = user_id
             feed.staff_id= staff_id
             
-            
-            #Just commit no adding. 
+            #Call the functions 
             db.session.commit()
             return jsonify({"Success": "Feedback updated successfully"}), 201
-#if the Feedback does not exist? 
+        
     else:
         return jsonify({"error": "Feedback id does not exist"}), 406
     
 #fetch one Feedback based on id 
-@feed_bp.route('/feeds/<int:id>')
+@feed_bp.route('/user_feeds/<int:id>')
+@jwt_required()
 def fetch_one_user(id):
-    feed= Feed.query.get(id)
+    current_user_id = get_jwt_identity()
+    feed= Feedback.query.filter_by(id, user_id = current_user_id)
     
     if feed:
         return jsonify({
@@ -108,7 +109,6 @@ def fetch_one_user(id):
             "title":feed.title,
             "description":feed.description,
             "date":feed.date,
-            "user_id":feed.user_id,
             "staff_id":feed.staff_id,
             "user":{"id":feed.user.id, "username":feed.user.username, "email":feed.user.email},
             "staff":{"id":feed.staff.id, "department":feed.staff.department, "email":feed.staff.email}
@@ -118,10 +118,11 @@ def fetch_one_user(id):
     
 #Delete Feedback
 @feed_bp.route('/feeds/<int:feed_id>', methods=['DELETE'])
-           
+@jwt_required      
 def delete_user(feed_id):
     #get the feeds
-    feed = Feed.query.get(feed_id)
+    current_user_id = get_jwt_identity()
+    feed = Feedback.query.filter_by(feed_id, user_id = current_user_id)
     
     if feed:
         db.session.delete(feed)

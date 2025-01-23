@@ -18,7 +18,7 @@ class User(db.Model):
     password = db.Column(db.String(120), nullable = False)
 
     #create a relationship with the Feedback
-    feed = db.relationship("Feed",back_populates="user", lazy = True)
+    feed = db.relationship("Feedback",back_populates="users", lazy = True)
     
     #repr methods returns a string
     def __repr__(self):
@@ -36,30 +36,40 @@ class Staff(db.Model):
     password= db.Column(db.String(120), nullable=False)
     
     #relationship between the Staff and feedback
-    feed = db.relationship("Feed",back_populates= "staff", lazy = True)
+    feed = db.relationship("Feedback",back_populates= "staff", lazy = True)
     
     def __repr__(self):
-        return f"Staff('{self.feedback}')"
+        return f"Staff('{self.staff_name},{self.is_admin}, {self.is_admin}, {self.email},{self.department}, {self.password}')"
     
 # Feedback Table :  
-class Feed(db.Model):
-    __tablename__ = "feed"
+class Feedback(db.Model):
+    __tablename__ = "feedback"
     
     id = db.Column(db.Integer, primary_key = True)
     title = db.Column(db.String(128), nullable = False)
     description = db.Column(db.String(256))
     date= db.Column(db.DateTime, default = True)
+    feedback_type = db.Column(db.Boolean(20), nullable=False)
     
     #create a relationship 
-    user_id = db.Column(db.Integer,db.ForeignKey("users.id"))
     staff_id = db.Column(db.Integer,db.ForeignKey("staff.id"))
+    user_id = db.Column(db.Integer,db.ForeignKey("users.id"))
     
     # Relationship of Feedback with staff and users 
-    user = db.relationship("User" ,back_populates="feed")
-    staff = db.relationship("Staff", back_populates="feed")
+    user = db.relationship("User" ,back_populates="feedback")
+    staff = db.relationship("Staff", back_populates="feedback")
     
     def __repr__(self):
-        return f"Feed('{self.title}', '{self.description}', '{self.date}')"
+        return f"Feedback('{self.title}', '{self.description}', '{self.date},{self.feedback_type}')"
+    
+    #Logout Revoke Class
+class TokenBlocklist(db.Model):
+    __tablename__ = "token_blocklist"
+    
+    id = db.Column(db.Integer, primary_key=True)
+    jti = db.Column(db.String(36), nullable=False, index=True)
+    created_at = db.Column(db.DateTime, nullable=False)
+ 
     
     
     

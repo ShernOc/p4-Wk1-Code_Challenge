@@ -58,14 +58,15 @@ def add_staff():
         return jsonify({"Success": "Staff added successfully"})
 
 #UPDATE USER: 
-#you can update the name, password,email .. 
+
 @staff_bp.route('/staffs/<staff_id>', methods= ["PATCH"])
+@jwt_required()
 def update_staff_name(staff_id):
     #check if staff exist
-    staff = Staff.query.get(staff_id)
+    current_user_id = get_jwt_identity()
+    staff = Staff.query.filter_by(staff_id, user_id = current_user_id)
     
-    if staff: # if staff exist
-        #get the data 
+    if staff : 
         data = request.get_json()
         staff_name = data.get('staff_name', staff.staff_name)
         email = data.get('email', staff.email)

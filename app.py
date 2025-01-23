@@ -1,9 +1,10 @@
 from flask import Flask, jsonify, request 
 from flask_migrate import Migrate
-from models import User,Staff,Feed, db
+from models import db
 from flask_jwt_extended import JWTManager
 from datetime import timedelta
 from flask_mail import Mail
+
 
 #create a flask class 
 app = Flask(__name__)
