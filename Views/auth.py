@@ -3,7 +3,6 @@ from models import db,User, Staff, TokenBlocklist
 from werkzeug.security import check_password_hash
 from flask_jwt_extended import create_access_token,jwt_required, get_jwt_identity, get_jwt
 from datetime import datetime
-from datetime import timedelta
 from datetime import timezone
 
 #blueprint
@@ -65,7 +64,7 @@ def staff_login():
     else: 
         return jsonify({"Error":"Email/password or Authorization not Correct"}), 404
     
-
+ 
 #get the current Staff functions
 @auth_bp.route('/current_staff', methods = ['GET'])
 @jwt_required()

@@ -3,7 +3,7 @@ from flask_migrate import Migrate
 from models import db
 from flask_jwt_extended import JWTManager
 from datetime import timedelta
-from flask_mail import Mail
+from flask_mail import Mail,Message
 
 
 #create a flask class 
@@ -41,35 +41,40 @@ jwt.init_app(app)
 
 
 
+# Mail Credentials 
+# SMTP credentials
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USERNAME'] = 'sherlyne.ochieng@student.moringaschool.com'
+app.config['MAIL_DEFAULT_SENDER'] = 'sherlyne.ochieng@student.moringaschool.com'
+app.config['MAIL_PASSWORD'] = 'slim hbpc dwit bsli'
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USE_SSL'] = False
 
-#Mail Credentials 
- 
-# # SMTP credentials
-# app.config['MAIL_SERVER'] = 'smtp.gmail.com'
-# app.config['MAIL_PORT'] = 587
-# app.config['MAIL_USERNAME'] = 'sherlyne.ochieng@student.moringaschool.com'
-# app.config['MAIL_PASSWORD'] = 'slim hbpc dwit bsli'
-# app.config['MAIL_USE_TLS'] = True
-# app.config['MAIL_USE_SSL'] = False
+#initialize 
+mail = Mail(app)
 
-# mail = Mail(app)
+#create an instance of Message 
+@app.route('/send_email')
+def email():
+    try: 
+        msg = Message(
+        subject = "First Email!",
+        sender = ['MAIL_DEFAULT_SENDER'],
+        recipients= ["sherlynea8622@gmail.com","sherlyne.ochieng@student.moringaschool.com","david.kakhayanga@student.moringaschool.com" ],
+        #What the message body will send
+        body = "Did you get the email, Lol Hope You did : Flask Application")
+        
+        mail.send(msg)
+        return jsonify({"Success": "Message sent Successfully"
+            })
 
-# #create an instance of Message 
-# @app.route('/')
-# def email():
-#     msg = Message(
-#     subject = "First Email!",
-#     sender = "sherlyne.ochieng@student.moringaschool.com",
-#     recipients= ["sherlynea8622@gmail.com","ashley.natasha1@student.moringaschool.com", "antony.wambugu@student.moringaschool.com", "abdimalik.omar1@student.moringaschool.com" ],
-#     #What the message body will send
-#     body = "Hello,this is the first Flask email from the flask app. GROUP6")
-#     mail.send(msg)
-#     return "Message sent Successfully"
+    except Exception as e: 
+        return jsonify({"Error" :"Message sent Successfully"})
 
-#     except 
-
-# if __name__ == '__main__':
-#     app.run(debug=True)
+#run the app.py 
+if __name__ == '__main__':
+    app.run(debug=True, port= 5555)
     
     
 

@@ -2,16 +2,17 @@ from flask import jsonify,request,Blueprint
 from models import User,db
 from werkzeug.security import generate_password_hash
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from flask_mail import Mail
 
 #blueprint
 user_bp = Blueprint('user_bp', __name__)
 
 #Fetch/Get Users 
 @user_bp.route('/users')
+@jwt_required()
 def get_users():
+    current_user_id = get_jwt_identity()
     #get the users 
-    users = User.query.all()
+    users = User.query.filter_by(user_id = current_user_id).first()
     #create an empty list to store the users
     user_list = []
     
@@ -39,7 +40,7 @@ def get_users():
 #Add a users 
 @user_bp.route('/users', methods=["POST"])
 def add_users():
-    data = request.get_json() # This is an object in json 
+    data = request.get_json()
     username =data['username']
     email = data['email']
     phone_number= data['phone_number']
@@ -56,8 +57,11 @@ def add_users():
     #check and create errors
     if check_username or check_email: 
         return jsonify({"error":"username/email already exist"}),406
+    
     else: 
-        new_user = User(username = username, email = email,
+        new_user = User(
+        username = username, 
+        email = email,
         password = password,
         phone_number = phone_number )
         
@@ -67,13 +71,15 @@ def add_users():
         return jsonify({"Success": "Users added successfully"})
 
 #UPDATE USER: 
-#you can update the name, password,email .. 
+
 @user_bp.route('/users/<user_id>', methods= ["PATCH"])
+@jwt_required()
 def update_username(user_id):
+    current_user_id = get_jwt_identity()
     #check if user exist
     user = User.query.get(user_id)
     
-    if user: # if user exist
+    if user and user.user_id== current_user_id: # if user exist
         #get the data 
         data = request.get_json()
         username = data.get('username' , user.username)
@@ -103,15 +109,17 @@ def update_username(user_id):
     
 #fetch one User based on id 
 @user_bp.route('/users/<int:id>')
+@jwt_required()
 def fetch_one_user(id):
-    user= User.query.get(id)
+    current_user_id = get_jwt_identity()
+    user= User.query.filter_by(id, user_id = current_user_id).first()
     
     if user:
         return jsonify({
             "id":user.id,
             "username":user.username,
             "email":user.email,
-            "phone_number":user.is_complete,
+            "phone_number":user.phone_number,
             "password":user.password
         })
     else: 
@@ -119,9 +127,11 @@ def fetch_one_user(id):
     
 #Delete Users 
 @user_bp.route('/users/<int:user_id>', methods=['DELETE'])
+@jwt_required()
 def delete_user(user_id):
     #get the users
-    user = User.query.get(user_id)
+    current_user_id = get_jwt_identity()
+    user = User.query.filter_by(id = user_id, user_id= current_user_id)
     
     if user:
         db.session.delete(user)

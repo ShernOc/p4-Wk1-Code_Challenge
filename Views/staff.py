@@ -12,7 +12,7 @@ staff_bp = Blueprint('staff_bp', __name__)
 def get_staff():
     current_user_id = get_jwt_identity()
     #get the staffs 
-    staffs = Staff.query.filter_by(staff_id=current_user_id)
+    staffs = Staff.query.filter_by(staff_id=current_user_id).first()
     # empty list to store the staffs
     staff_list = []
     for staff in staffs: 
@@ -25,7 +25,7 @@ def get_staff():
             "department":staff.department,
             "password":staff.password
         })
-    return jsonify(staff_list)
+    return jsonify({"Current stuff":staff_list})
 
 
 #Add a staffs 
@@ -95,8 +95,10 @@ def update_staff_name(staff_id):
     
 #fetch one Staff based on id 
 @staff_bp.route('/staffs/<int:id>')
+@jwt_required()
 def fetch_one_user(id):
-    staff= Staff.query.get(id)
+    current_staff_id = get_jwt_identity()
+    staff= Staff.query.filter_by(id, staff_id = current_staff_id)
     
     if staff:
         return jsonify({
@@ -110,10 +112,12 @@ def fetch_one_user(id):
         return jsonify({"Error":"Staff does not exist"}),406
     
 #Delete Staff
-@staff_bp.route('/staffs/<int:staff_id>',methods=['DELETE'])          
+@staff_bp.route('/staffs/<int:staff_id>',methods=['DELETE']) 
+@jwt_required()       
 def delete_user(staff_id):
     #get the staffs
-    staff = Staff.query.get(staff_id)
+    current_staff_id = get_jwt_identity()
+    staff = Staff.query.filter_by(staff_id=current_staff_id)
     
     if staff:
         db.session.delete(staff)
